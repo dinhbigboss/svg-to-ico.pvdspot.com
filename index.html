@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG To ICO - Free Online Converter</title>
+    <meta name="description"
+        content="Convert SVG to ICO online for free. Fast, secure, client-side processing. Batch convert multiple files and download as ZIP.">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://svg-to-ico.pvdspot.com/">
+    <meta property="og:title" content="SVG To ICO - Free Online Converter">
+    <meta property="og:description"
+        content="Convert SVG to ICO online for free. Fast, secure, client-side processing. Batch convert multiple files.">
+    <meta property="og:image" content="https://svg-to-ico.pvdspot.com/og-image.svg">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://svg-to-ico.pvdspot.com/">
+    <meta property="twitter:title" content="SVG To ICO - Free Online Converter">
+    <meta property="twitter:description"
+        content="Convert SVG to ICO online for free. Fast, secure, client-side processing. Batch convert multiple files.">
+    <meta property="twitter:image" content="https://svg-to-ico.pvdspot.com/og-image.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3B82F6',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(107, 114, 128, 0.8);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col font-sans">
+
+    <header class="fixed top-0 w-full z-50 glass transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 group transition-transform hover:scale-105">
+                <div class="w-8 h-8 rounded-lg overflow-hidden shadow-sm">
+                    <img src="/favicon.svg" alt="SVG To ICO Logo" class="w-full h-full object-cover">
+                </div>
+                <span
+                    class="font-bold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-primary transition-colors">SVG
+                    To ICO</span>
+            </a>
+
+            <button id="theme-toggle"
+                class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+                aria-label="Toggle Dark Mode">
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h1
+                class="text-4xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400">
+                Convert SVG to ICO Instantly
+            </h1>
+            <p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                Free, fast, and secure online converter. Process multiple files entirely in your browser.
+            </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 md:p-10 mb-12 transition-all duration-300 hover:shadow-lg">
+
+            <div id="drop-zone"
+                class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center transition-all duration-300 hover:border-primary hover:bg-blue-50/50 dark:hover:bg-blue-900/20 cursor-pointer group relative">
+                <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    accept=".svg" multiple aria-label="Upload SVG files">
+
+                <div
+                    class="pointer-events-none flex flex-col items-center justify-center gap-4 transition-transform group-hover:scale-105 duration-300">
+                    <div class="p-4 bg-blue-100 dark:bg-blue-900/50 rounded-full text-primary">
+                        <i data-lucide="upload-cloud" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <p class="text-lg font-medium text-slate-700 dark:text-slate-200">
+                            Click to upload or drag and drop
+                        </p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            SVG files only (Max 15 files)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="error-message"
+                class="hidden mt-4 p-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg border border-red-200 dark:border-red-800 flex items-center gap-2 animate-shake">
+                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
+                <span id="error-text">Error message goes here.</span>
+            </div>
+
+            <div id="results-container" class="hidden mt-8 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <h2 class="text-xl font-semibold flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                        Converted Files (<span id="result-count">0</span>)
+                    </h2>
+                    <button id="download-all-btn"
+                        class="hidden bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm hover:shadow-md">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Download All ZIP
+                    </button>
+                </div>
+
+                <div id="file-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                </div>
+            </div>
+        </div>
+
+        <section class="glass-card rounded-2xl p-6 md:p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-slate-800 dark:text-white">
+                <i data-lucide="book-open" class="w-6 h-6 text-primary"></i>
+                User Guide
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="flex flex-col gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-primary border border-slate-200 dark:border-slate-700">
+                        1</div>
+                    <h3 class="font-semibold text-lg">Upload Files</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">
+                        Click the upload area or drag and drop your SVG files. You can select up to 15 files at once.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-primary border border-slate-200 dark:border-slate-700">
+                        2</div>
+                    <h3 class="font-semibold text-lg">Automatic Conversion</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">
+                        Our system instantly processes your files in the browser. No data is sent to any server.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-primary border border-slate-200 dark:border-slate-700">
+                        3</div>
+                    <h3 class="font-semibold text-lg">Download</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">
+                        Download individual ICO files or get them all in a single ZIP archive.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-2xl p-6 md:p-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-slate-800 dark:text-white">
+                <i data-lucide="help-circle" class="w-6 h-6 text-primary"></i>
+                Frequently Asked Questions
+            </h2>
+            <div class="space-y-4">
+                <details
+                    class="group border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-800/50 open:bg-white dark:open:bg-slate-800 transition-all duration-300">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4">
+                        <span>Is this service free?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="text-slate-600 dark:text-slate-400 p-4 pt-0 text-sm leading-relaxed">
+                        Yes, SVG To ICO is completely free to use. There are no hidden fees or subscriptions required.
+                    </div>
+                </details>
+
+                <details
+                    class="group border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-800/50 open:bg-white dark:open:bg-slate-800 transition-all duration-300">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4">
+                        <span>Are my files secure?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="text-slate-600 dark:text-slate-400 p-4 pt-0 text-sm leading-relaxed">
+                        Absolutely. All conversions happen locally in your browser (client-side). Your files are never
+                        uploaded to our servers, ensuring complete privacy.
+                    </div>
+                </details>
+
+                <details
+                    class="group border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-800/50 open:bg-white dark:open:bg-slate-800 transition-all duration-300">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4">
+                        <span>What is the maximum file limit?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="text-slate-600 dark:text-slate-400 p-4 pt-0 text-sm leading-relaxed">
+                        You can convert up to 15 SVG files simultaneously. If you need to convert more, simply reload or
+                        clear the list and upload the next batch.
+                    </div>
+                </details>
+
+                <details
+                    class="group border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-800/50 open:bg-white dark:open:bg-slate-800 transition-all duration-300">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4">
+                        <span>What format is the output?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="text-slate-600 dark:text-slate-400 p-4 pt-0 text-sm leading-relaxed">
+                        The tool generates standard .ico files suitable for use as favicons on websites or icons in
+                        applications.
+                    </div>
+                </details>
+
+                <details
+                    class="group border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-800/50 open:bg-white dark:open:bg-slate-800 transition-all duration-300">
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4">
+                        <span>Does it support transparency?</span>
+                        <span class="transition group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="text-slate-600 dark:text-slate-400 p-4 pt-0 text-sm leading-relaxed">
+                        Yes, transparency in your SVG files is preserved in the converted ICO files.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="/" class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg overflow-hidden">
+                            <img src="/favicon.svg" alt="Logo" class="w-full h-full object-cover">
+                        </div>
+                        <span class="font-bold text-xl text-slate-900 dark:text-white">SVG To ICO</span>
+                    </a>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm max-w-xs">
+                        A professional tool for converting SVG vector graphics into ICO icons directly in your browser.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-4">
+                        Company</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://pvdspot.com/about-us.html" target="_blank" rel="noopener noreferrer"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm transition-colors">About
+                                Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Legal
+                    </h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://pvdspot.com/privacy-policy.html" target="_blank" rel="noopener noreferrer"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm transition-colors">Privacy
+                                Policy</a>
+                        </li>
+                        <li>
+                            <a href="https://pvdspot.com/terms-of-use.html" target="_blank" rel="noopener noreferrer"
+                                class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm transition-colors">Terms
+                                of Use</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 dark:text-slate-400 text-sm text-center md:text-left">
+                    &copy; <span id="current-year"></span> <a href="/" class="hover:text-primary transition-colors">SVG
+                        To ICO</a>. All Rights Reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="cookie-banner"
+        class="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-4 shadow-lg transform translate-y-full transition-transform duration-500 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <p class="text-sm text-slate-600 dark:text-slate-300 text-center md:text-left">
+                We use cookies to enhance your user experience and analyze traffic. By using our website, you agree to
+                our use of cookies.
+            </p>
+            <button id="cookie-accept"
+                class="bg-primary hover:bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors shadow-sm whitespace-nowrap">
+                Got It
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        const cookieBanner = document.getElementById('cookie-banner');
+        const cookieAccept = document.getElementById('cookie-accept');
+
+        if (!localStorage.getItem('cookieConsent')) {
+            setTimeout(() => {
+                cookieBanner.classList.remove('translate-y-full');
+            }, 1000);
+        }
+
+        cookieAccept.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'true');
+            cookieBanner.classList.add('translate-y-full');
+        });
+
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const errorMsg = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const resultsContainer = document.getElementById('results-container');
+        const fileList = document.getElementById('file-list');
+        const resultCount = document.getElementById('result-count');
+        const downloadAllBtn = document.getElementById('download-all-btn');
+
+        let convertedFiles = [];
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-primary', 'bg-blue-50', 'dark:bg-blue-900/20');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-primary', 'bg-blue-50', 'dark:bg-blue-900/20');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-primary', 'bg-blue-50', 'dark:bg-blue-900/20');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+            fileInput.value = '';
+        });
+
+        function showError(msg) {
+            errorText.textContent = msg;
+            errorMsg.classList.remove('hidden');
+            errorMsg.classList.remove('animate-shake');
+            void errorMsg.offsetWidth;
+            errorMsg.classList.add('animate-shake');
+        }
+
+        function hideError() {
+            errorMsg.classList.add('hidden');
+        }
+
+        function clearResults() {
+            convertedFiles.forEach(f => URL.revokeObjectURL(f.url));
+            convertedFiles = [];
+            fileList.innerHTML = '';
+            resultsContainer.classList.add('hidden');
+            resultCount.textContent = '0';
+        }
+
+        async function handleFiles(files) {
+            hideError();
+
+            if (files.length === 0) return;
+
+            if (files.length > 15) {
+                showError('You can only upload a maximum of 15 files at a time.');
+                return;
+            }
+
+            clearResults();
+            resultsContainer.classList.remove('hidden');
+
+            const validFiles = Array.from(files).filter(file => file.type === 'image/svg+xml' || file.name.endsWith('.svg'));
+
+            if (validFiles.length !== files.length) {
+                showError('Some files were ignored because they are not SVG files.');
+            }
+
+            if (validFiles.length === 0) {
+                if (!errorMsg.classList.contains('hidden')) return;
+                showError('Please select valid SVG files.');
+                return;
+            }
+
+            for (const file of validFiles) {
+                try {
+                    const icoBlob = await convertSvgToIco(file);
+                    const icoName = file.name.replace(/\.svg$/i, '.ico');
+                    const icoUrl = URL.createObjectURL(icoBlob);
+
+                    addFileResult(icoName, icoBlob, icoUrl);
+                } catch (err) {
+                    console.error('Conversion failed for', file.name, err);
+                    showError(`Failed to convert ${file.name}`);
+                }
+            }
+
+            updateDownloadAllButton();
+        }
+
+        function addFileResult(name, blob, url) {
+            convertedFiles.push({ name, blob, url });
+            resultCount.textContent = convertedFiles.length;
+
+            const item = document.createElement('div');
+            item.className = 'glass bg-white/50 dark:bg-slate-800/50 p-4 rounded-xl flex items-center justify-between gap-4 animate-fade-in transition-all hover:bg-white/80 dark:hover:bg-slate-800/80';
+
+            item.innerHTML = `
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="w-10 h-10 rounded bg-white dark:bg-slate-700 flex items-center justify-center p-1 border border-slate-200 dark:border-slate-600 flex-shrink-0">
+                        <img src="${url}" class="max-w-full max-h-full" alt="Icon Preview">
+                    </div>
+                    <span class="font-medium text-sm text-slate-700 dark:text-slate-200 truncate" title="${name}">${name}</span>
+                </div>
+                <a href="${url}" download="${name}" class="p-2 text-primary hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-full transition-colors" aria-label="Download ${name}">
+                    <i data-lucide="download" class="w-5 h-5"></i>
+                </a>
+            `;
+
+            fileList.appendChild(item);
+            lucide.createIcons();
+        }
+
+        function updateDownloadAllButton() {
+            if (convertedFiles.length > 0) {
+                downloadAllBtn.classList.remove('hidden');
+            } else {
+                downloadAllBtn.classList.add('hidden');
+            }
+        }
+
+        downloadAllBtn.addEventListener('click', async () => {
+            const zip = new JSZip();
+            convertedFiles.forEach(file => {
+                zip.file(file.name, file.blob);
+            });
+
+            const content = await zip.generateAsync({ type: 'blob' });
+            const zipUrl = URL.createObjectURL(content);
+
+            const link = document.createElement('a');
+            link.href = zipUrl;
+            link.download = 'converted_icons.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(zipUrl);
+        });
+
+        function convertSvgToIco(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 256;
+                        canvas.height = 256;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, 256, 256);
+
+                        canvas.toBlob((pngBlob) => {
+                            if (!pngBlob) {
+                                reject(new Error('Canvas to Blob failed'));
+                                return;
+                            }
+                            pngToIco(pngBlob).then(resolve).catch(reject);
+                        }, 'image/png');
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function pngToIco(pngBlob) {
+            const pngBuffer = await pngBlob.arrayBuffer();
+            const pngData = new Uint8Array(pngBuffer);
+
+            const header = new Uint8Array([
+                0, 0,
+                1, 0,
+                1, 0
+            ]);
+
+            const fileSize = pngData.length;
+            const offset = 6 + 16;
+
+            const directory = new Uint8Array([
+                0,
+                0,
+                0,
+                0,
+                1, 0,
+                32, 0,
+                fileSize & 0xFF, (fileSize >> 8) & 0xFF, (fileSize >> 16) & 0xFF, (fileSize >> 24) & 0xFF,
+                offset & 0xFF, (offset >> 8) & 0xFF, (offset >> 16) & 0xFF, (offset >> 24) & 0xFF
+            ]);
+
+            const icoBuffer = new Uint8Array(header.length + directory.length + pngData.length);
+            icoBuffer.set(header, 0);
+            icoBuffer.set(directory, header.length);
+            icoBuffer.set(pngData, header.length + directory.length);
+
+            return new Blob([icoBuffer], { type: 'image/x-icon' });
+        }
+    </script>
+</body>
+
+</html>
